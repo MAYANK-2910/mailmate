@@ -1,0 +1,27 @@
+{
+  "extends": "./.wxt/tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./components/*"],
+      "@services/*": ["./services/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@store/*": ["./store/*"],
+      "@storage/*": ["./storage/*"],
+      "@utils/*": ["./utils/*"],
+      "@constants/*": ["./constants/*"],
+      "@typeDefs/*": ["./types/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".wxt/wxt.d.ts"
+  ]
+}
