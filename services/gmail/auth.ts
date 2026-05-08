@@ -28,3 +28,20 @@ export async function authenticate(interactive: boolean = true): Promise<string>
     });
   });
 }
+
+export async function getToken(): Promise<string> {
+  if (authState.token) {
+    return authState.token;
+  }
+  return authenticate(false).catch(() => authenticate(true));
+}
+
+export async function revokeToken(): Promise<void> {
+  if (!authState.token) return;
+  return new Promise((resolve) => {
+    chrome.identity.removeCachedAuthToken({ token: authState.token! }, () => {
+      authState = { token: null, isAuthenticated: false };
+      resolve();
+    });
+  });
+}
