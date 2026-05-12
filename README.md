@@ -359,6 +359,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-<p align="center">
-  Built with ❤️ by <a href="https://github.com/MAYANK-2910">Mayank</a>
-</p>
