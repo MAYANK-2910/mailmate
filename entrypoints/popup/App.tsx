@@ -13,12 +13,6 @@ export function Popup() {
   }, []);
 
   const handleOpenSidePanel = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tab = tabs[0];
-      if (tab?.id) {
-        chrome.sidePanel.open({ tabId: tab.id }).catch(console.error);
-      }
-    });
     window.close();
   };
 
@@ -34,7 +28,7 @@ export function Popup() {
     <div className="w-[320px] bg-bg-primary text-text-primary">
       <div className="p-4">
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-2xl">📬</span>
+          <span className="material-symbols-outlined text-[24px] text-accent">mail</span>
           <div>
             <h1 className="text-base font-bold tracking-tight">Mailman</h1>
             <p className="text-[10px] text-text-muted">Stack-based email workspace</p>
@@ -60,11 +54,11 @@ export function Popup() {
                 'transition-all duration-200 active:scale-[0.98]'
               )}
             >
-              Open Mailman
+              Close Popup
             </button>
 
             <p className="text-[10px] text-text-muted text-center">
-              Navigate to Gmail and click the extension icon to open the side panel.
+              Look for the floating <span className="material-symbols-outlined text-[12px] align-middle">mail</span> button in the bottom right corner of your Gmail tab.
             </p>
           </div>
         ) : (
