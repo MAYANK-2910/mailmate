@@ -12,24 +12,27 @@ let authState: AuthState = {
 
 export async function authenticate(interactive: boolean = true): Promise<string> {
   return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive }, (result) => {
+    chrome.runtime.sendMessage({ type: 'AUTHENTICATE', interactive }, (response) => {
       if (chrome.runtime.lastError) {
         authState = { token: null, isAuthenticated: false };
         reject(new Error(chrome.runtime.lastError.message));
         return;
       }
 
-      // Handle both older API (string) and MV3 (GetAuthTokenResult object)
-      const token = typeof result === 'string' ? result : (result as chrome.identity.GetAuthTokenResult)?.token;
+      if (response?.error) {
+        authState = { token: null, isAuthenticated: false };
+        reject(new Error(response.error));
+        return;
+      }
 
-      if (!token) {
+      if (!response?.token) {
         authState = { token: null, isAuthenticated: false };
         reject(new Error('No token received'));
         return;
       }
 
-      authState = { token, isAuthenticated: true };
-      resolve(token);
+      authState = { token: response.token, isAuthenticated: true };
+      resolve(response.token);
     });
   });
 }
@@ -44,7 +47,7 @@ export async function getToken(): Promise<string> {
 export async function revokeToken(): Promise<void> {
   if (!authState.token) return;
   return new Promise((resolve) => {
-    chrome.identity.removeCachedAuthToken({ token: authState.token! }, () => {
+    chrome.runtime.sendMessage({ type: 'REVOKE_TOKEN', token: authState.token }, () => {
       authState = { token: null, isAuthenticated: false };
       resolve();
     });

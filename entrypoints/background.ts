@@ -1,19 +1,30 @@
 export default defineBackground(() => {
-  chrome.sidePanel
-    .setPanelBehavior({ openPanelOnActionClick: true })
-    .catch(console.error);
-
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (tab.url?.includes('mail.google.com')) {
-      chrome.sidePanel.setOptions({
-        tabId,
-        path: 'sidepanel.html',
-        enabled: true,
-      }).catch(console.error);
-    }
-  });
-
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'AUTHENTICATE') {
+      chrome.identity.getAuthToken({ interactive: message.interactive }, (result) => {
+        if (chrome.runtime.lastError) {
+          sendResponse({ error: chrome.runtime.lastError.message });
+          return;
+        }
+        
+        const token = typeof result === 'string' ? result : (result as chrome.identity.GetAuthTokenResult)?.token;
+        if (!token) {
+          sendResponse({ error: 'No token received' });
+          return;
+        }
+
+        sendResponse({ token });
+      });
+      return true; // Keep message channel open for async response
+    }
+
+    if (message.type === 'REVOKE_TOKEN') {
+      chrome.identity.removeCachedAuthToken({ token: message.token }, () => {
+        sendResponse({ success: true });
+      });
+      return true;
+    }
+
     if (message.type === 'GET_AUTH_STATUS') {
       chrome.identity.getAuthToken({ interactive: false }, (token) => {
         sendResponse({ authenticated: !!token });

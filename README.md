@@ -64,46 +64,44 @@
 
 **Why this architecture?**
 - **Gmail API** (not DOM scraping) → reliable structured data, survives Gmail UI updates, supports 50k+ emails
-- **Shadow DOM Overlay** (not content injection into Gmail's DOM) → fully isolated CSS, no conflicts with Gmail's complex stylesheets
-- **Content Script** mounts the entire React app inside a Shadow Root on `mail.google.com`, with a minimize/restore toggle
+- **Shadow DOM Overlay** (not content injection into Gmail's DOM)## 🚀 Getting Started & Installation Guide
 
----
+### 1. Prerequisites (OS-Specific)
 
-## 🛠️ Tech Stack
+**🍎 macOS**
+```bash
+# Install Node.js using Homebrew
+brew install node
 
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| **Framework** | React 19 + TypeScript (strict) | Type-safe, component-driven UI |
-| **Extension** | WXT + Manifest V3 | Modern DX, file-based entrypoints, cross-browser |
-| **State** | Zustand | Lightweight, no boilerplate, React 19 compatible |
-| **Styling** | Tailwind CSS v4 | Utility-first, custom theme tokens, dark/light modes |
-| **Animations** | Framer Motion | Spring physics, layout animations, gesture support |
-| **Storage** | IndexedDB + chrome.storage | Offline cache + synced settings |
-| **Data** | Gmail REST API + OAuth2 | Structured email data, full thread access |
-| **Security** | DOMPurify | Sanitized HTML rendering for email bodies |
-| **Utilities** | date-fns, clsx, react-window | Date formatting, class merging, virtualization |
+# Install Google Chrome
+brew install --cask google-chrome
+```
 
----
+**🪟 Windows**
+- Download and install **Node.js** from [nodejs.org](https://nodejs.org)
+- Download and install **Google Chrome** from [google.com/chrome](https://www.google.com/chrome/)
 
-## 🚀 Getting Started
+**🐧 Linux**
+```bash
+# Install Node.js (Ubuntu/Debian)
+sudo apt install nodejs npm
 
-### Prerequisites
+# Install Google Chrome (Required: Do not use Chromium)
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+```
+> **⚠️ Important for Linux:** You must use official Google Chrome. `chrome.identity` API is disabled in open-source Chromium.
 
-- **Node.js** 18+  
-- **npm** 9+  
-- **Google Chrome** (latest) — required on all platforms (macOS, Windows, Linux)
+### 2. Clone & Install
 
-### 1. Clone & Install
-
+Open your terminal or command prompt:
 ```bash
 git clone https://github.com/MAYANK-2910/mailmate.git
 cd mailmate
 npm install
 ```
 
-### 2. Gmail API Setup
-
-> You need a Google Cloud project to authenticate with Gmail.
+### 3. Gmail API Setup (Required)
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. **Create a new project** (or select existing)
@@ -111,96 +109,44 @@ npm install
 4. Search for **Gmail API** and click **Enable**
 5. Go to **APIs & Services → OAuth consent screen**
    - Choose **External** user type
-   - Fill in app name, support email
    - Add scope: `https://www.googleapis.com/auth/gmail.readonly`
-   - Add your email as a test user
+   - **Important:** Add your email address as a **Test User** to bypass "Access blocked" errors.
 6. Go to **APIs & Services → Credentials**
    - Click **Create Credentials → OAuth client ID**
    - Application type: **Chrome Extension**
-   - Item ID: *(get this from step 3 below)*
+   - Item ID: *(Leave this open, you will get the ID in step 4)*
 
-### 3. Configure Extension ID
+### 4. Configure & Build
 
-```bash
-# Build the extension first
-npm run build
-```
-
-1. Open Chrome → `chrome://extensions` → Enable **Developer mode**
-2. Click **Load unpacked** → select the `.output/chrome-mv3` folder
-3. Copy the **Extension ID** shown on the card
-4. Go back to Google Cloud Console → paste the ID in your OAuth credential's **Application ID** field
-5. Copy the **Client ID** from Google Cloud Console
-6. Open `wxt.config.ts` and replace:
-
-```typescript
-oauth2: {
-  client_id: 'YOUR_CLIENT_ID.apps.googleusercontent.com',  // ← paste here
-  scopes: ['https://www.googleapis.com/auth/gmail.readonly'],
-},
-```
-
-### 4. Build & Run
-
-```bash
-# Development (auto-reloads on changes)
-npm run dev
-
-# Production build
-npm run build
-```
-
----
-
-## 💻 Installation Guide
-
-### 🍎 macOS
-
-1. **Install Node.js** (if not already installed):
+1. Build the extension first:
    ```bash
-   # Using Homebrew (recommended)
-   brew install node
-
-   # Or download from https://nodejs.org
-   ```
-
-2. **Install Google Chrome** (if not already installed):
-   ```bash
-   brew install --cask google-chrome
-   ```
-
-3. **Clone and build**:
-   ```bash
-   git clone https://github.com/MAYANK-2910/mailmate.git
-   cd mailmate
-   npm install
    npm run build
    ```
+2. Open Chrome and go to `chrome://extensions`
+3. Enable **Developer mode** (top right)
+4. Click **Load unpacked** and select the `.output/chrome-mv3` folder inside the project.
+5. Copy the **Extension ID** generated on the Mailman card.
+6. Go back to Google Cloud Console → paste the ID into the **Application ID** field and save.
+7. Copy your **Client ID** from Google Cloud Console.
+8. Open `wxt.config.ts` and paste it:
+   ```typescript
+   oauth2: {
+     client_id: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
+     scopes: ['https://www.googleapis.com/auth/gmail.readonly'],
+   },
+   ```
+9. Rebuild the extension to apply the Client ID:
+   ```bash
+   npm run build
+   ```
+10. Click the **Refresh icon (↻)** on the Mailman card in `chrome://extensions`.
 
-4. **Load the extension in Chrome**:
-   - Open Google Chrome
-   - Navigate to `chrome://extensions`
-   - Toggle **Developer mode** ON (top-right corner)
-   - Click **Load unpacked**
-   - Navigate to the project folder → select the `.output/chrome-mv3` directory
-   - The Mailman extension card will appear with an assigned Extension ID
+### 5. Launch Mailman
 
-5. **Sign in to Chrome** (required for `chrome.identity` API):
-   - Click the profile icon in the top-right corner of Chrome
-   - Sign in with your Google account
-   - This enables the extension to authenticate with Gmail
-
-6. **Open Gmail** → A floating 📬 button appears in the bottom-right corner. Click it to launch Mailman!
-
-> **macOS Tip:** If you see "Access blocked" when signing in, make sure your email is added as a **test user** in the Google Cloud Console's OAuth consent screen.
-
-### 🪟 Windows
-
-1. **Install Node.js**: Download from [nodejs.org](https://nodejs.org) (LTS recommended)
-2. **Install Google Chrome**: Download from [google.com/chrome](https://www.google.com/chrome/)
-3. **Open PowerShell or Command Prompt**:
-   ```powershell
-   git clone https://github.com/MAYANK-2910/mailmate.git
+1. Ensure you are signed into your Chrome browser profile.
+2. Open `mail.google.com`.
+3. You will see a floating `📬` button in the bottom right corner.
+4. Click it to launch the Mailman overlay and authenticate!mailmate.git
    cd mailmate
    npm install
    npm run build
