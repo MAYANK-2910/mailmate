@@ -9,7 +9,10 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
-  const { theme, toggleTheme, compactMode, updateSettings, keyboardShortcutsEnabled } = useSettingsStore();
+  const { 
+    enableSmartStacks, enablePriorityRanking, enableFocusMode, 
+    compactMode, updateSettings, keyboardShortcutsEnabled 
+  } = useSettingsStore();
 
   return (
     <AnimatePresence>
@@ -24,8 +27,16 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               </div>
 
               <div className="p-4 space-y-4 max-h-80 overflow-y-auto scrollbar-thin">
-                <SettingRow label="Dark Mode" description="Toggle between dark and light themes">
-                  <Toggle enabled={theme === 'dark'} onChange={() => toggleTheme()} size="sm" />
+                <SettingRow label="Smart Stacks" description="Automatically group emails into smart categories">
+                  <Toggle enabled={enableSmartStacks} onChange={(v) => updateSettings({ enableSmartStacks: v })} size="sm" />
+                </SettingRow>
+
+                <SettingRow label="Priority Ranking" description="Rank important emails and humans first">
+                  <Toggle enabled={enablePriorityRanking} onChange={(v) => updateSettings({ enablePriorityRanking: v })} size="sm" />
+                </SettingRow>
+
+                <SettingRow label="Focus Mode" description="Hide unimportant categories to stay focused">
+                  <Toggle enabled={enableFocusMode} onChange={(v) => updateSettings({ enableFocusMode: v })} size="sm" />
                 </SettingRow>
 
                 <SettingRow label="Compact Mode" description="Show more emails with less spacing">
