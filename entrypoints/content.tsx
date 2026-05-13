@@ -33,36 +33,34 @@ export default defineContentScript({
 
     window.addEventListener('hashchange', updateVisibility);
 
-    const observer = new MutationObserver(async () => {
-      const mainContainer = document.querySelector('div[role="main"]');
-      if (mainContainer && !document.querySelector('mailman-overlay')) {
-        observer.disconnect();
-
-        ui = await createShadowRootUi(ctx, {
-          name: 'mailman-overlay',
-          position: 'inline',
-          anchor: mainContainer,
-          append: 'first',
-          onMount: (container) => {
-            container.style.display = 'block';
-            container.style.width = '100%';
-            container.style.height = '100%';
-            container.style.overflow = 'hidden';
-
-            const root = createRoot(container);
-            root.render(<App />);
-            return root;
-          },
-          onRemove: (root) => {
-            root?.unmount();
-          },
-        });
-
-        ui.mount();
-        updateVisibility();
+    const handleUpdate = () => {
+      const route = routeManager.getRoute();
+      const capability = getCapability(route);
+      
+      if (capability.showMailman) {
+        mountManager.mountToMain();
+      } else {
+        mountManager.unmountFromMain();
       }
-    });
+    };
 
-    observer.observe(document.body, { childList: true, subtree: true });
+    routeManager.onRouteOY(handleUpdate);
+
+    const watchdog = new Watchdog(
+      () => {
+        const route = routeManager.getRoute();
+        const capability = getCapability(route);
+        if (!capability.showMailman) return true;
+        return mountManager.isMounted();
+      },
+      () => handleUpdate()
+    );
+
+    const container = mountManager.createMountPoint('mailman-workspace');
+    const root = createRoot(container);
+    root.render(<App />);
+
+    watchdog.start();
+    handleUpdate();
   },
 });
