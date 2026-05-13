@@ -79,11 +79,14 @@ export function useEmails() {
       if (hasAuth) {
         await loadCachedEmails();
         await fetchEmails();
+      } else {
+        setLoading(false);
       }
     } catch {
       setAuthenticated(false);
+      setLoading(false);
     }
-  }, [setAuthenticated, loadCachedEmails, fetchEmails]);
+  }, [setAuthenticated, loadCachedEmails, fetchEmails, setLoading]);
 
   const login = useCallback(async () => {
     try {
