@@ -21,6 +21,8 @@ interface EmailStore {
   error: string | null;
   totalUnread: number;
 
+  isMinimized: boolean;
+
   setEmails: (emails: Email[]) => void;
   setStacks: (stacks: Stack[]) => void;
   setSenderGroups: (groups: SenderGroup[]) => void;
@@ -40,6 +42,7 @@ interface EmailStore {
   setLoading: (loading: boolean) => void;
   setAuthenticated: (authenticated: boolean) => void;
   setError: (error: string | null) => void;
+  setMinimized: (minimized: boolean) => void;
 }
 
 export const useEmailStore = create<EmailStore>((set) => ({
@@ -59,6 +62,7 @@ export const useEmailStore = create<EmailStore>((set) => ({
   isAuthenticated: false,
   error: null,
   totalUnread: 0,
+  isMinimized: true, // Start minimized so user isn't immediately blocked until they want it
 
   setEmails: (emails) =>
     set({
@@ -100,4 +104,5 @@ export const useEmailStore = create<EmailStore>((set) => ({
   setLoading: (loading) => set({ isLoading: loading }),
   setAuthenticated: (authenticated) => set({ isAuthenticated: authenticated }),
   setError: (error) => set({ error }),
+  setMinimized: (minimized) => set({ isMinimized: minimized }),
 }));
