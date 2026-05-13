@@ -15,7 +15,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'important',
     label: 'Important',
-    icon: '⭐',
+    icon: 'star',
     color: '#eab308',
     bgColor: 'rgba(234, 179, 8, 0.12)',
     keywords: ['urgent', 'asap', 'important', 'critical', 'deadline', 'action required', 'immediate'],
@@ -25,7 +25,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'work',
     label: 'Work',
-    icon: '💼',
+    icon: 'work',
     color: '#3b82f6',
     bgColor: 'rgba(59, 130, 246, 0.12)',
     keywords: ['meeting', 'standup', 'sprint', 'jira', 'confluence', 'deploy', 'review', 'pr', 'merge', 'pipeline', 'release'],
@@ -35,7 +35,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'personal',
     label: 'Personal',
-    icon: '💜',
+    icon: 'person',
     color: '#a855f7',
     bgColor: 'rgba(168, 85, 247, 0.12)',
     keywords: ['family', 'birthday', 'party', 'dinner', 'weekend', 'vacation', 'trip'],
@@ -45,7 +45,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'finance',
     label: 'Finance',
-    icon: '💰',
+    icon: 'payments',
     color: '#22c55e',
     bgColor: 'rgba(34, 197, 94, 0.12)',
     keywords: ['invoice', 'payment', 'receipt', 'transaction', 'bank', 'statement', 'tax', 'refund', 'billing', 'subscription'],
@@ -55,7 +55,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'shopping',
     label: 'Shopping',
-    icon: '🛒',
+    icon: 'shopping_cart',
     color: '#f97316',
     bgColor: 'rgba(249, 115, 22, 0.12)',
     keywords: ['order', 'shipped', 'delivered', 'tracking', 'purchase', 'cart', 'discount', 'sale'],
@@ -65,7 +65,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'social',
     label: 'Social',
-    icon: '💬',
+    icon: 'group',
     color: '#ec4899',
     bgColor: 'rgba(236, 72, 153, 0.12)',
     keywords: ['follow', 'like', 'comment', 'mention', 'friend', 'connection', 'invite'],
@@ -75,7 +75,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'newsletters',
     label: 'Newsletters',
-    icon: '📰',
+    icon: 'article',
     color: '#14b8a6',
     bgColor: 'rgba(20, 184, 166, 0.12)',
     keywords: ['newsletter', 'digest', 'weekly', 'roundup', 'unsubscribe', 'edition', 'issue'],
@@ -85,7 +85,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'promotions',
     label: 'Promotions',
-    icon: '🏷️',
+    icon: 'sell',
     color: '#f59e0b',
     bgColor: 'rgba(245, 158, 11, 0.12)',
     keywords: ['promo', 'offer', 'deal', 'coupon', 'free', 'limited time', 'exclusive', 'save', 'off', 'special'],
@@ -95,7 +95,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'education',
     label: 'Education',
-    icon: '📚',
+    icon: 'school',
     color: '#6366f1',
     bgColor: 'rgba(99, 102, 241, 0.12)',
     keywords: ['course', 'lesson', 'assignment', 'grade', 'class', 'lecture', 'enrollment', 'certificate'],
@@ -105,7 +105,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'updates',
     label: 'Updates',
-    icon: '🔔',
+    icon: 'notifications',
     color: '#06b6d4',
     bgColor: 'rgba(6, 182, 212, 0.12)',
     keywords: ['update', 'notification', 'alert', 'reminder', 'verify', 'confirm', 'security', 'password'],
@@ -115,7 +115,7 @@ export const CATEGORIES: CategoryConfig[] = [
   {
     id: 'spam',
     label: 'Spam',
-    icon: '🚫',
+    icon: 'block',
     color: '#ef4444',
     bgColor: 'rgba(239, 68, 68, 0.12)',
     keywords: ['winner', 'congratulations', 'claim', 'lottery', 'million', 'inheritance'],
