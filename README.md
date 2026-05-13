@@ -96,8 +96,8 @@ sudo dpkg -i google-chrome-stable_current_amd64.deb
 
 Open your terminal or command prompt:
 ```bash
-git clone https://github.com/MAYANK-2910/mailmate.git
-cd mailmate
+git clone https://github.com/MAYANK-2910/Mailman.git
+cd Mailman
 npm install
 ```
 
@@ -146,47 +146,8 @@ npm install
 1. Ensure you are signed into your Chrome browser profile.
 2. Open `mail.google.com`.
 3. You will see a floating `📬` button in the bottom right corner.
-4. Click it to launch the Mailman overlay and authenticate!mailmate.git
-   cd mailmate
-   npm install
-   npm run build
-   ```
-4. Follow steps 4–6 from the macOS guide above to load the extension.
+4. Click it to launch the Mailman overlay and authenticate!
 
-### 🐧 Linux
-
-1. **Install Node.js**:
-   ```bash
-   # Ubuntu/Debian
-   sudo apt install nodejs npm
-
-   # Fedora
-   sudo dnf install nodejs npm
-
-   # Arch
-   sudo pacman -S nodejs npm
-   ```
-
-2. **Install Google Chrome** (not Chromium — required for `chrome.identity` API):
-   ```bash
-   # Fedora
-   sudo dnf install google-chrome-stable
-
-   # Ubuntu/Debian
-   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-   sudo dpkg -i google-chrome-stable_current_amd64.deb
-   ```
-
-3. **Clone and build**:
-   ```bash
-   git clone https://github.com/MAYANK-2910/mailmate.git
-   cd mailmate
-   npm install
-   npm run build
-   ```
-4. Follow steps 4–6 from the macOS guide above to load the extension.
-
-> **⚠️ Important (Linux):** You **must** use the official Google Chrome browser, not open-source Chromium. Google removed `chrome.identity` API support from Chromium in 2021. The extension will fail to authenticate on Chromium.
 
 ---
 
@@ -213,7 +174,7 @@ npm install
 ## 📁 Project Structure
 
 ```
-mailmate/
+Mailman/
 ├── entrypoints/                # Chrome extension entry points
 │   ├── background.ts           # Service worker — auth, badges, messaging
 │   ├── content.tsx             # Gmail page — Shadow DOM overlay (React app)
@@ -361,18 +322,7 @@ npm run zip            # Package for Chrome Web Store
 
 ---
 
-## 🗺️ Roadmap
 
-- [ ] Gmail compose integration (reply/forward from overlay)
-- [ ] Custom category rules (user-defined keywords and domains)
-- [ ] Email snoozing and reminders
-- [ ] Unread count badge sync
-- [ ] Cross-browser support (Firefox, Edge)
-- [ ] Outlook and Yahoo Mail API adapters
-- [ ] Email templates and quick replies
-- [ ] Advanced analytics (response times, volume trends)
-
----
 
 ## 🤝 Contributing
 
