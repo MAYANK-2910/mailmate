@@ -88,7 +88,7 @@ export function App() {
           ) : (
             <>
               {viewMode === 'stacks' ? (
-                <StackList stacks={filteredStacks} />
+                <VirtualInbox stacks={filteredStacks} />
               ) : (
                 <SenderList senderGroups={filteredSenderGroups} />
               )}
