@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  A modern Chrome extension that replaces Gmail's flat chronological inbox<br/>
+  A modern Chrome extension that overlays Gmail's flat chronological inbox<br/>
   with categorized stacks, sender groups, priority ranking, and focus mode.
 </p>
 
@@ -34,7 +34,7 @@
 | 🔍 **Command Palette** | Fast search via `⌘K` across sender, subject, and category with keyboard navigation |
 | ⌨️ **Keyboard Shortcuts** | Navigate with J/K, toggle focus with F, switch themes with T, and more |
 | 🌙 **Dark & Light Themes** | Premium design with smooth Framer Motion animations and glassmorphism |
-| 📌 **Chrome Side Panel** | Lives alongside Gmail — persists across tabs, zero CSS conflicts |
+| 🖥️ **Full-Screen Overlay** | Injects directly into Gmail via Shadow DOM — no side panels, no popups, just a clean workspace |
 | 🔒 **Privacy First** | All processing local, read-only Gmail access, data never leaves your browser |
 
 ---
@@ -44,10 +44,10 @@
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                     Chrome Extension (WXT)                    │
-├──────────────┬──────────────┬───────────────┬────────────────┤
-│  Background  │  Side Panel  │Content Script │     Popup      │
-│  (Worker)    │  (React App) │ (Gmail Page)  │ (Quick Actions)│
-├──────────────┴──────────────┴───────────────┴────────────────┤
+├──────────────┬────────────────────────────┬──────────────────┤
+│  Background  │   Content Script (React)   │      Popup       │
+│  (Worker)    │   Full-Screen Overlay UI   │  (Quick Actions) │
+├──────────────┴────────────────────────────┴──────────────────┤
 │                                                               │
 │  ┌─────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────┐  │
 │  │Gmail API│  │ Category │  │ Priority │  │   Search     │  │
@@ -64,8 +64,8 @@
 
 **Why this architecture?**
 - **Gmail API** (not DOM scraping) → reliable structured data, survives Gmail UI updates, supports 50k+ emails
-- **Side Panel** (not content injection) → native Chrome surface, no CSS conflicts, persists across navigations
-- **Content Script** is lightweight — just a floating indicator button on Gmail
+- **Shadow DOM Overlay** (not content injection into Gmail's DOM) → fully isolated CSS, no conflicts with Gmail's complex stylesheets
+- **Content Script** mounts the entire React app inside a Shadow Root on `mail.google.com`, with a minimize/restore toggle
 
 ---
 
@@ -91,7 +91,7 @@
 
 - **Node.js** 18+  
 - **npm** 9+  
-- **Google Chrome** (latest)
+- **Google Chrome** (latest) — required on all platforms (macOS, Windows, Linux)
 
 ### 1. Clone & Install
 
@@ -122,15 +122,16 @@ npm install
 ### 3. Configure Extension ID
 
 ```bash
-# Start dev mode first to generate the extension
-npm run dev
+# Build the extension first
+npm run build
 ```
 
 1. Open Chrome → `chrome://extensions` → Enable **Developer mode**
-2. Find **Mailman** in the list and copy the **Extension ID**
-3. Go back to Google Cloud Console → paste the ID in your OAuth credential
-4. Copy the **Client ID** from Google Cloud Console
-5. Open `wxt.config.ts` and replace:
+2. Click **Load unpacked** → select the `.output/chrome-mv3` folder
+3. Copy the **Extension ID** shown on the card
+4. Go back to Google Cloud Console → paste the ID in your OAuth credential's **Application ID** field
+5. Copy the **Client ID** from Google Cloud Console
+6. Open `wxt.config.ts` and replace:
 
 ```typescript
 oauth2: {
@@ -139,7 +140,7 @@ oauth2: {
 },
 ```
 
-### 4. Run
+### 4. Build & Run
 
 ```bash
 # Development (auto-reloads on changes)
@@ -149,15 +150,97 @@ npm run dev
 npm run build
 ```
 
-### 5. Load in Chrome (Production)
+---
 
-1. Run `npm run build`
-2. Open Chrome → `chrome://extensions`
-3. Enable **Developer mode** (top right toggle)
-4. Click **Load unpacked**
-5. Select the `.output/chrome-mv3` folder
-6. Navigate to **Gmail** → click the Mailman extension icon
-7. **Sign in with Google** (one-click) → your stacks appear!
+## 💻 Installation Guide
+
+### 🍎 macOS
+
+1. **Install Node.js** (if not already installed):
+   ```bash
+   # Using Homebrew (recommended)
+   brew install node
+
+   # Or download from https://nodejs.org
+   ```
+
+2. **Install Google Chrome** (if not already installed):
+   ```bash
+   brew install --cask google-chrome
+   ```
+
+3. **Clone and build**:
+   ```bash
+   git clone https://github.com/MAYANK-2910/mailmate.git
+   cd mailmate
+   npm install
+   npm run build
+   ```
+
+4. **Load the extension in Chrome**:
+   - Open Google Chrome
+   - Navigate to `chrome://extensions`
+   - Toggle **Developer mode** ON (top-right corner)
+   - Click **Load unpacked**
+   - Navigate to the project folder → select the `.output/chrome-mv3` directory
+   - The Mailman extension card will appear with an assigned Extension ID
+
+5. **Sign in to Chrome** (required for `chrome.identity` API):
+   - Click the profile icon in the top-right corner of Chrome
+   - Sign in with your Google account
+   - This enables the extension to authenticate with Gmail
+
+6. **Open Gmail** → A floating 📬 button appears in the bottom-right corner. Click it to launch Mailman!
+
+> **macOS Tip:** If you see "Access blocked" when signing in, make sure your email is added as a **test user** in the Google Cloud Console's OAuth consent screen.
+
+### 🪟 Windows
+
+1. **Install Node.js**: Download from [nodejs.org](https://nodejs.org) (LTS recommended)
+2. **Install Google Chrome**: Download from [google.com/chrome](https://www.google.com/chrome/)
+3. **Open PowerShell or Command Prompt**:
+   ```powershell
+   git clone https://github.com/MAYANK-2910/mailmate.git
+   cd mailmate
+   npm install
+   npm run build
+   ```
+4. Follow steps 4–6 from the macOS guide above to load the extension.
+
+### 🐧 Linux
+
+1. **Install Node.js**:
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install nodejs npm
+
+   # Fedora
+   sudo dnf install nodejs npm
+
+   # Arch
+   sudo pacman -S nodejs npm
+   ```
+
+2. **Install Google Chrome** (not Chromium — required for `chrome.identity` API):
+   ```bash
+   # Fedora
+   sudo dnf install google-chrome-stable
+
+   # Ubuntu/Debian
+   wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+   sudo dpkg -i google-chrome-stable_current_amd64.deb
+   ```
+
+3. **Clone and build**:
+   ```bash
+   git clone https://github.com/MAYANK-2910/mailmate.git
+   cd mailmate
+   npm install
+   npm run build
+   ```
+4. Follow steps 4–6 from the macOS guide above to load the extension.
+
+> **⚠️ Important (Linux):** You **must** use the official Google Chrome browser, not open-source Chromium. Google removed `chrome.identity` API support from Chromium in 2021. The extension will fail to authenticate on Chromium.
 
 ---
 
@@ -168,7 +251,7 @@ npm run build
 | `J` | Next email |
 | `K` | Previous email |
 | `Enter` | Open email |
-| `Escape` | Close preview |
+| `Escape` | Close preview / Minimize overlay |
 | `⌘K` or `/` | Open search |
 | `F` | Toggle focus mode |
 | `T` | Toggle dark/light theme |
@@ -186,18 +269,15 @@ npm run build
 ```
 mailmate/
 ├── entrypoints/                # Chrome extension entry points
-│   ├── background.ts           # Service worker — auth, side panel, badges
-│   ├── content.ts              # Gmail page — floating indicator button
-│   ├── sidepanel/              # Main UI (React app in Chrome Side Panel)
-│   │   ├── index.html
-│   │   ├── main.tsx
-│   │   └── App.tsx             # Root app with auth flow + layout
+│   ├── background.ts           # Service worker — auth, badges, messaging
+│   ├── content.tsx             # Gmail page — Shadow DOM overlay (React app)
 │   └── popup/                  # Extension popup (quick actions)
 │       ├── index.html
 │       ├── main.tsx
 │       └── App.tsx
 │
 ├── components/                 # React components
+│   ├── App.tsx                 # Root app — overlay with minimize/restore toggle
 │   ├── layout/                 # Header, NavTabs
 │   ├── stacks/                 # StackList, StackCard, EmailRow
 │   ├── senders/                # SenderList, SenderCard
@@ -278,6 +358,19 @@ Gmail API  →  Parse MIME  →  Categorize  →  Rank Priority  →  Group into
 5. **Group** — Emails grouped into collapsible stacks by category or by sender
 6. **Cache** — Results stored in IndexedDB for instant load on next open
 
+### Overlay Architecture
+
+When you open `mail.google.com`, the content script (`entrypoints/content.tsx`) automatically:
+
+1. Creates a **Shadow DOM** container attached to the page body
+2. Mounts the full **React application** inside the shadow root
+3. Injects **Tailwind CSS** into the shadow root (isolated from Gmail's styles)
+4. Starts in **minimized mode** — showing only a floating `📬` button
+5. Clicking the button expands the full-screen overlay panel
+6. Clicking `✕` in the header minimizes back to the floating button
+
+This approach ensures **zero CSS conflicts** with Gmail and lets you seamlessly switch between the Mailman workspace and Gmail's native interface.
+
 ### Category Classification
 
 Each email is scored against all 11 categories. The highest-scoring category wins:
@@ -297,6 +390,7 @@ Each email is scored against all 11 categories. The highest-scoring category win
 - **Local processing** — All categorization, ranking, and search happens in your browser
 - **No external servers** — Data goes directly from your browser to Google's API
 - **Minimal permissions** — Only `gmail.readonly` scope
+- **Shadow DOM isolation** — Extension UI is fully sandboxed from Gmail's DOM
 - **Sanitized rendering** — Email HTML is cleaned with DOMPurify before display
 - **Secure storage** — Cached data stays in browser's IndexedDB, never transmitted
 
@@ -315,15 +409,15 @@ npm run zip            # Package for Chrome Web Store
 ### Dev workflow
 
 1. `npm run dev` starts WXT dev server with HMR
-2. Changes to popup/sidepanel hot-reload instantly
-3. Content script and background changes require extension reload
+2. Changes to components and hooks hot-reload instantly
+3. Content script changes require extension reload
 4. Open `chrome://extensions` → click the reload button on Mailman
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] Gmail compose integration (reply/forward from side panel)
+- [ ] Gmail compose integration (reply/forward from overlay)
 - [ ] Custom category rules (user-defined keywords and domains)
 - [ ] Email snoozing and reminders
 - [ ] Unread count badge sync
