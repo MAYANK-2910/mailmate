@@ -5,3 +5,5 @@ dist/
 .DS_Store
 .wxt/
 _backup/
+key.pem
+.env*
