@@ -4,10 +4,11 @@ export type SortOrder = 'priority' | 'date' | 'unread';
 export type PanelView = 'inbox' | 'preview' | 'settings';
 
 export interface AppSettings {
-  theme: Theme;
+  enableSmartStacks: boolean;
+  enablePriorityRanking: boolean;
+  enableFocusMode: boolean;
   viewMode: ViewMode;
   sortOrder: SortOrder;
-  focusMode: boolean;
   compactMode: boolean;
   keyboardShortcutsEnabled: boolean;
   hiddenCategories: string[];
@@ -16,10 +17,11 @@ export interface AppSettings {
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
-  theme: 'dark',
+  enableSmartStacks: true,
+  enablePriorityRanking: true,
+  enableFocusMode: false,
   viewMode: 'stacks',
   sortOrder: 'priority',
-  focusMode: false,
   compactMode: false,
   keyboardShortcutsEnabled: true,
   hiddenCategories: [],

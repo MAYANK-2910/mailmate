@@ -18,6 +18,8 @@ export interface Email {
   labels: string[];
   category: EmailCategory;
   priority: PriorityLevel;
+  isDirect: boolean;
+  hasUnsubscribe: boolean;
 }
 
 export interface Thread {
