@@ -92,7 +92,7 @@ export function Popup() {
       </div>
 
       <div className="px-4 py-2 border-t border-border flex items-center justify-between">
-        <span className="text-[10px] text-text-muted">v1.0.0</span>
+        <span className="text-[10px] text-text-muted">v2.0.0</span>
         <div className="flex items-center gap-2 text-[10px] text-text-muted">
           <span>⌘K Search</span>
           <span>F Focus</span>

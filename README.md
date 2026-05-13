@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-6366f1?style=for-the-badge" alt="Version" />
+  <img src="https://img.shields.io/badge/version-2.0.0-6366f1?style=for-the-badge" alt="Version" />
   <img src="https://img.shields.io/badge/manifest-v3-34d399?style=for-the-badge" alt="Manifest V3" />
   <img src="https://img.shields.io/badge/react-19-61dafb?style=for-the-badge&logo=react&logoColor=white" alt="React" />
   <img src="https://img.shields.io/badge/typescript-strict-3178c6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
