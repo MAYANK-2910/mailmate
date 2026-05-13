@@ -6,20 +6,17 @@
   <img src="https://img.shields.io/badge/license-MIT-eab308?style=for-the-badge" alt="MIT License" />
 </p>
 
-<h1 align="center">📬 Mailman</h1>
+<h1 align="center">📬 Mailman — The Native Gmail Workspace</h1>
 
-<p align="center">
-  <strong>Transform your Gmail into a calm, organized, stack-based email workspace.</strong>
-</p>
+Transform your Gmail into a calm, organized, stack-based workspace. Mailman is a production-grade Gmail extension that replaces your cluttered inbox with a high-performance, virtualized stack-based interface.
 
-<p align="center">
-  A modern Chrome extension that overlays Gmail's flat chronological inbox<br/>
-  with categorized stacks, sender groups, priority ranking, and focus mode.
-</p>
+### 🚀 Key Features
 
-<p align="center">
-  <em>Inspired by <strong>Linear</strong>, <strong>Notion</strong>, and <strong>Arc Browser</strong></em>
-</p>
+- **Native Gmail Integration:** Mounts directly into the Gmail workspace, preserving your sidebars and top navigation.
+- **Virtualized Stacks:** Supports 10k+ emails with 60fps scrolling and low memory footprint.
+- **Command Palette:** `Cmd+K` to jump anywhere, archive stacks, or trigger cleanup rules.
+- **Productivity Engine:** VIM-like keyboard navigation (`j/k` for threads, `Shift+j/k` for stacks).
+- **Local Indexing:** Fast, offline-first search and grouping powered by Dexie.js.
 
 ---
 
