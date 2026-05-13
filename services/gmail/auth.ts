@@ -12,17 +12,22 @@ let authState: AuthState = {
 
 export async function authenticate(interactive: boolean = true): Promise<string> {
   return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive }, (token) => {
+    chrome.identity.getAuthToken({ interactive }, (result) => {
       if (chrome.runtime.lastError) {
         authState = { token: null, isAuthenticated: false };
         reject(new Error(chrome.runtime.lastError.message));
         return;
       }
+
+      // Handle both older API (string) and MV3 (GetAuthTokenResult object)
+      const token = typeof result === 'string' ? result : (result as chrome.identity.GetAuthTokenResult)?.token;
+
       if (!token) {
         authState = { token: null, isAuthenticated: false };
         reject(new Error('No token received'));
         return;
       }
+
       authState = { token, isAuthenticated: true };
       resolve(token);
     });
