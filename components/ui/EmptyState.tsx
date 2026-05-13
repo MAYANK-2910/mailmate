@@ -19,7 +19,7 @@ export function EmptyState({ icon, title, description, action, className }: Empt
         className
       )}
     >
-      <span className="text-5xl mb-4" role="img" aria-hidden="true">
+      <span className="material-symbols-outlined text-5xl mb-4 text-text-muted" aria-hidden="true">
         {icon}
       </span>
       <h3 className="text-lg font-semibold text-text-primary mb-2">

@@ -18,7 +18,7 @@ export function StackList({ stacks }: StackListProps) {
   if (stacks.length === 0) {
     return (
       <EmptyState
-        icon="📭"
+        icon="inbox"
         title="No stacks yet"
         description="Your email stacks will appear here once emails are loaded."
       />
@@ -45,9 +45,9 @@ function StackCard({ stack }: { stack: Stack }) {
   return (
     <div
       className={cn(
-        'rounded-xl border border-border bg-bg-secondary/60',
+        'rounded-xl border border-border bg-bg-secondary',
         'transition-all duration-200',
-        'hover:border-border-light hover:bg-bg-secondary'
+        'hover:shadow-sm hover:bg-bg-hover'
       )}
     >
       <button
@@ -57,8 +57,10 @@ function StackCard({ stack }: { stack: Stack }) {
         aria-label={`${stack.label} stack, ${stack.unreadCount} unread`}
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          <span className="text-base shrink-0">{stack.icon}</span>
-          <span className="text-sm font-semibold text-text-primary truncate">
+          <span className="material-symbols-outlined text-[20px] shrink-0" style={{ color: config?.color }}>
+            {stack.icon}
+          </span>
+          <span className="text-sm font-medium text-text-primary truncate">
             {stack.label}
           </span>
           {stack.unreadCount > 0 && (
@@ -75,9 +77,9 @@ function StackCard({ stack }: { stack: Stack }) {
           <motion.span
             animate={{ rotate: stack.isCollapsed ? -90 : 0 }}
             transition={{ duration: 0.2 }}
-            className="text-text-muted text-xs"
+            className="material-symbols-outlined text-text-muted text-[16px]"
           >
-            ▾
+            expand_more
           </motion.span>
         </div>
       </button>

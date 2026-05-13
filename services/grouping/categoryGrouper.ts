@@ -8,25 +8,34 @@ function scoreCategoryMatch(email: Email, config: CategoryConfig): number {
   const snippetLower = email.snippet.toLowerCase();
   const senderDomain = email.sender.domain.toLowerCase();
 
+  // 1. Gmail Labels (Highest confidence)
   for (const label of email.labels) {
     if (config.gmailLabels.includes(label)) {
       score += 50;
     }
   }
 
+  // 2. Exact Domain or Subdomain match
   for (const domain of config.domains) {
-    if (senderDomain.includes(domain)) {
-      score += 40;
+    if (senderDomain === domain || senderDomain.endsWith(`.${domain}`)) {
+      score += 45;
     }
   }
 
+  // 3. Regex Keyword Matching (Word boundaries prevent partial matches like "urgent" in "detergent")
   for (const keyword of config.keywords) {
-    if (subjectLower.includes(keyword)) {
-      score += 20;
+    const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+    if (regex.test(subjectLower)) {
+      score += 25;
     }
-    if (snippetLower.includes(keyword)) {
-      score += 10;
+    if (regex.test(snippetLower)) {
+      score += 15;
     }
+  }
+
+  // 4. Special logic for Newsletters / Promotions
+  if (config.id === 'newsletters' && email.hasUnsubscribe) {
+    score += 30;
   }
 
   return score;

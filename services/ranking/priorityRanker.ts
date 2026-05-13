@@ -36,6 +36,10 @@ function calculatePriorityScore(email: Email): number {
     }
   }
 
+  if (email.isDirect) {
+    score += 40;
+  }
+
   const ageMs = Date.now() - email.date.getTime();
   const oneHour = 3600000;
   const twentyFourHours = 86400000;

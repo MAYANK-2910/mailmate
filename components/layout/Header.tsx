@@ -1,21 +1,21 @@
 import { cn } from '../../utils/cn';
 import { useEmailStore } from '../../store/emailStore';
-import { useTheme } from '../../hooks/useTheme';
+import { useSettingsStore } from '../../store/settingsStore';
 import { Toggle } from '../ui/Toggle';
 import { Badge } from '../ui/Badge';
 import { useFocusMode } from '../../hooks/useFocusMode';
 
 export function Header() {
-  const { totalUnread, isSearchOpen, toggleSearch, setMinimized } = useEmailStore();
-  const { theme, toggleTheme } = useTheme();
+  const { totalUnread, isSearchOpen, toggleSearch } = useEmailStore();
+  const { enableFocusMode } = useSettingsStore();
   const { focusMode, toggleFocusMode, focusStats } = useFocusMode();
 
   return (
-    <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-bg-secondary/80 backdrop-blur-md">
+    <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-bg-secondary">
       <div className="flex items-center gap-2.5">
         <div className="flex items-center gap-2">
-          <span className="text-xl" role="img" aria-label="Mailman logo">📬</span>
-          <h1 className="text-base font-bold text-text-primary tracking-tight">
+          <span className="material-symbols-outlined text-[20px] text-accent">mail</span>
+          <h1 className="text-[15px] font-medium text-text-primary tracking-tight">
             Mailman
           </h1>
         </div>
@@ -33,49 +33,31 @@ export function Header() {
           </span>
         )}
 
-        <button
-          onClick={() => toggleFocusMode()}
-          className={cn(
-            'p-1.5 rounded-lg text-sm transition-all duration-200',
-            'hover:bg-bg-tertiary',
-            focusMode && 'text-accent bg-accent/10'
-          )}
-          aria-label="Toggle focus mode"
-          title="Focus mode (F)"
-        >
-          🎯
-        </button>
+        {enableFocusMode && (
+          <button
+            onClick={() => toggleFocusMode()}
+            className={cn(
+              'p-1.5 rounded-full text-sm transition-all duration-200 flex items-center justify-center',
+              'hover:bg-bg-hover text-text-secondary',
+              focusMode && 'text-accent bg-accent/10'
+            )}
+            aria-label="Toggle focus mode"
+            title="Focus mode (F)"
+          >
+            <span className="material-symbols-outlined text-[20px]">filter_center_focus</span>
+          </button>
+        )}
 
         <button
           onClick={toggleSearch}
           className={cn(
-            'p-1.5 rounded-lg text-sm transition-all duration-200 hover:bg-bg-tertiary',
+            'p-1.5 rounded-full text-sm transition-all duration-200 hover:bg-bg-hover flex items-center justify-center text-text-secondary',
             isSearchOpen && 'text-accent bg-accent/10'
           )}
           aria-label="Search"
           title="Search (⌘K)"
         >
-          🔍
-        </button>
-
-        <button
-          onClick={toggleTheme}
-          className="p-1.5 rounded-lg text-sm transition-all duration-200 hover:bg-bg-tertiary"
-          aria-label="Toggle theme"
-          title="Toggle theme (T)"
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-
-        <div className="w-px h-4 bg-border mx-1" />
-
-        <button
-          onClick={() => setMinimized(true)}
-          className="p-1.5 rounded-lg text-sm transition-all duration-200 hover:bg-danger/10 hover:text-danger text-text-secondary"
-          aria-label="Minimize"
-          title="Minimize Mailman"
-        >
-          ✕
+          <span className="material-symbols-outlined text-[20px]">search</span>
         </button>
       </div>
     </header>

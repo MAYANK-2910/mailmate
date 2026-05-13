@@ -9,8 +9,8 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  { id: 'stacks', label: 'Stacks', icon: '📂' },
-  { id: 'senders', label: 'Senders', icon: '👤' },
+  { id: 'stacks', label: 'Stacks', icon: 'folder_open' },
+  { id: 'senders', label: 'Senders', icon: 'person' },
 ];
 
 export function NavTabs() {
@@ -32,7 +32,7 @@ export function NavTabs() {
           aria-selected={viewMode === tab.id}
           role="tab"
         >
-          <span className="text-xs">{tab.icon}</span>
+          <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
           {tab.label}
         </button>
       ))}

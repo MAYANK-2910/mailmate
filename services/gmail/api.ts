@@ -148,13 +148,22 @@ export function parseGmailMessage(msg: GmailMessage): Email {
   const to = getHeaderValue(headers, 'To');
   const subject = getHeaderValue(headers, 'Subject');
   const date = getHeaderValue(headers, 'Date');
+  const listUnsubscribe = getHeaderValue(headers, 'List-Unsubscribe');
+  const precedence = getHeaderValue(headers, 'Precedence');
+
+  const recipients = parseRecipients(to);
+  const sender = parseSender(from);
+
+  // An email is likely "direct" if it's not a bulk email (Precedence: list/bulk)
+  // and doesn't have an unsubscribe link
+  const isAutomated = !!listUnsubscribe || ['list', 'bulk', 'junk'].includes(precedence.toLowerCase());
 
   return {
     id: msg.id,
     threadId: msg.threadId,
     subject: subject || '(No Subject)',
-    sender: parseSender(from),
-    recipients: parseRecipients(to),
+    sender,
+    recipients,
     snippet: msg.snippet,
     body: extractBody(msg.payload),
     date: date ? new Date(date) : new Date(parseInt(msg.internalDate, 10)),
@@ -163,6 +172,8 @@ export function parseGmailMessage(msg: GmailMessage): Email {
     labels: msg.labelIds ?? [],
     category: 'updates',
     priority: 'medium',
+    isDirect: !isAutomated && recipients.length > 0,
+    hasUnsubscribe: !!listUnsubscribe,
   };
 }
 
